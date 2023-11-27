@@ -16,8 +16,8 @@ func (rh rawHint) Hint() string {
 func main() {
 	_, _ = os.Stderr.Write([]byte("started!"))
 
-	po := preimage.NewOracleClient(preimage.ClientPreimageChannel())
-	hinter := preimage.NewHintWriter(preimage.ClientHinterChannel())
+	po := preimage.NewOracleClient(preimage.CreatePreimageChannel())
+	hinter := preimage.NewHintWriter(preimage.CreateHinterChannel())
 	preHash := *(*[32]byte)(po.Get(preimage.LocalIndexKey(0)))
 	diffHash := *(*[32]byte)(po.Get(preimage.LocalIndexKey(1)))
 	claimData := *(*[8]byte)(po.Get(preimage.LocalIndexKey(2)))

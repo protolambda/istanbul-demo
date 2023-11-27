@@ -6,8 +6,7 @@ import (
 	"encoding/hex"
 	"errors"
 	preimage "github.com/ethereum-optimism/optimism/op-preimage"
-	cl "github.com/ethereum-optimism/optimism/op-program/client"
-	"github.com/ethereum-optimism/optimism/op-program/host/kvstore"
+	"github.com/ethereum-optimism/optimism/op-preimage/kvstore"
 	oppio "github.com/ethereum-optimism/optimism/op-program/io"
 	oplog "github.com/ethereum-optimism/optimism/op-service/log"
 	"github.com/ethereum-optimism/optimism/op-service/opio"
@@ -31,8 +30,8 @@ func main() {
 	})
 	logger.Info("started server")
 
-	preimageChan := cl.CreatePreimageChannel()
-	hinterChan := cl.CreateHinterChannel()
+	preimageChan := preimage.CreatePreimageChannel()
+	hinterChan := preimage.CreateHinterChannel()
 	err := server(ctx, logger, preimageChan, hinterChan)
 	if err != nil {
 		logger.Error("server error", "err", err)
@@ -103,6 +102,7 @@ func server(ctx context.Context, logger log.Logger, preimageChannel oppio.FileCh
 			switch h {
 			case diffHash:
 				log.Info("handling diff fetch")
+				_ = kv.Put(preimage.Keccak256Key(diffHash).PreimageKey(), diff)
 				_ = kv.Put(preimage.Keccak256Key(crypto.Keccak256Hash(encodeU64(a))).PreimageKey(), encodeU64(a))
 				_ = kv.Put(preimage.Keccak256Key(crypto.Keccak256Hash(encodeU64(b))).PreimageKey(), encodeU64(b))
 			default:
