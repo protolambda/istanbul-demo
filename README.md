@@ -1,16 +1,14 @@
 # onchain summit Fault Proof workshop
 
-## Prerequisites
-
-Install cannon:
 ```bash
 git clone git@github.com:ethereum-optimism/optimism.git
-cd optimism
-go install ./cannon
-```
+git clone git@github.com:protolambda/istanbul-demo.git
 
-## Build & run
+cd istanbul-demo
 
-```bash
+# run natively
+make oracle_test
+
+# with cannon, generating proof data from emulated MIPS
 make proof_example
 ```
